@@ -186,10 +186,17 @@ const PageHeader = styled.div`
       background-position-x: 6px!important;
       background-image: url('https://getliner.com/src/images/export-header.svg');
       position: relative;
+      &:hover{
+          background-color:#f6f8fa;
+        }
     }
     .tags-dropdown-container{
       display: inline;
       position: relative;
+      &:hover{
+          background-color:#f6f8fa;
+          border-radius: 50%;
+        }
       .add-tags{
         width: 32px;
         height: 32px;
@@ -198,6 +205,7 @@ const PageHeader = styled.div`
         background-position: 50%;
         border-radius: 50%;
         background-image: url('https://getliner.com/src/images/addtags-header.svg');
+        
       }
     }
     .move-to-trash{
@@ -209,6 +217,9 @@ const PageHeader = styled.div`
       border-radius: 50%;
       background-image: url('https://getliner.com/src/images/delete-header.svg');
       position: relative;
+      &:hover{
+          background-color:#f6f8fa;
+        }
     }
   }
   .tab-container{
@@ -299,7 +310,7 @@ const PageHeader = styled.div`
       }
     }
     .focus{
-      border: 1px solid #c6cbd3;
+      border: 1px solid #c6cbd3 !important;
     }
     .search-form{
       width: 100%;
@@ -320,6 +331,7 @@ const PageHeader = styled.div`
           width: calc(100% - 34px);
           height: 100%;
           flex-shrink: 1;
+          
           font-family: "Roboto","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
           font-size: 14px;
           font-weight: 400;
@@ -341,6 +353,10 @@ const PageHeader = styled.div`
           margin-left: auto;
           margin-right: 6px;
           flex-shrink: 0;
+          &:hover{
+            background-color: #f6f8fa;
+            border-radius: 50%;
+          }
         }
         .cancel-search-button{
           background-size: 24px;
@@ -353,6 +369,10 @@ const PageHeader = styled.div`
           margin-left: auto;
           margin-right: 6px;
           flex-shrink: 0;
+          &:hover{
+            background-color: #f6f8fa;
+    
+          }
         }
       }
     }
@@ -495,6 +515,9 @@ const PageList = styled.div`
           margin: 0 0 6px;
           height: 24px;
           padding: 0 6px;
+          &:hover{
+          background-color:#f6f8fa;
+        }
         }
       }
     }
@@ -593,7 +616,7 @@ const PageList = styled.div`
 					position:relative;
 					height:32px;
 				}
-				.share{
+				.export{
 					background-image: url('https://getliner.com/src/images/export-header.svg')
 				}
 				.more{
@@ -665,7 +688,7 @@ const PageList = styled.div`
 	}
 `;
 
-function PageArticle({page,onToggle}) {
+function PageArticle({page,onToggle,closeModal}) {
 	const [moreModal, setmoreModal] = useState(false)
 	const [isShare, setIsShare] = useState(false)
 	const [modal, setModal] = useState(false)
@@ -678,10 +701,7 @@ function PageArticle({page,onToggle}) {
 	const sharePage = () => {
 		setIsShare(prev => !prev);
 	}
-	const closeModal = (event) => {
-		setModal(prev => !prev);
-		console.log(event.target);
-	}
+
 
 	return(
 		<article 
@@ -741,8 +761,8 @@ function PageArticle({page,onToggle}) {
             </li>
           </ul>}
 					<div className="dropdown-container">
-						<button onClick={closeModal} className="circular-button share"></button>
-            {modal && <Modal closeModal={closeModal}/>}
+						<button onClick={closeModal} className="export circular-button"></button>
+            {modal && <Modal closeModal={closeModal} class/>}
 					</div>
 					<div className="dropdown-container">
 						<button onClick= {onClick}className="circular-button more"></button>
@@ -899,15 +919,17 @@ function MyHighlights() {
       done: false
     }
   ])
-  const [pdfModal, setPdfModal] = useState(false);
+  const [modal, setModal] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
+  const [modalClass, setModalClass] = useState('original');
   const selectedPages = pages.filter(page=> page.done);
 
-  const openModal = (event) =>{
-    // const {target:{}}= event;
-    console.log(event);
-
-  }
+  const closeModal = (event) => {
+		setModal(prev => !prev);
+		
+		const {target:{classList}} = event;
+		setModalClass(classList[0])
+	}
 
   const onToggle = (event) => {
     const {target:{id}} = event;
@@ -915,7 +937,9 @@ function MyHighlights() {
         page.id === id ? {...page,done:!page.done} : page
       ))
   }
-
+  const openSearchBar = () => {
+    setIsSearch(true);
+  }
   const onClick = () => {
     setIsSearch(prev => !prev)
   }
@@ -958,11 +982,11 @@ function MyHighlights() {
 						</GuideContainer>
 						)}
             </div>
-            <button onClick={openModal} className="pdf add-highlights grey-border-btn">
-                <img alt="add highlights" src='https://getliner.com/src/images/add-highlights.svg' />
-                <span >PDF</span>
+            <button onClick={closeModal} className="pdf add-highlights grey-border-btn">
+                <img className="pdf"alt="add highlights" src='https://getliner.com/src/images/add-highlights.svg' />
+                <span className="pdf">PDF</span>
             </button>
-            {/* <Modal/> */}
+            {modal && <Modal closeModal={closeModal} modalClass={modalClass}/>}
           </TitleContainer>
           <SummaryContainer >
             <div className="pages" >{pages.length}  Pages</div>
@@ -990,7 +1014,7 @@ function MyHighlights() {
               <Link to="myhighlights/tags" className="tab-item tags inactive" href="/myhighlights/tags" >Tags</Link>
             </div>}
             
-            <div className="filter-button-container" >
+            <div className="filter-button-container" style={isSearch ? {width:'100%'}: {}} >
               {isSearch? <div className="search-option-container">
                 <div className="filter dropdown-container">
                   <div className="search-option-button">
@@ -1000,11 +1024,12 @@ function MyHighlights() {
                 </div>
               </div>
               :<div className="tags-dropdown-container" >
-                <button className="tag-filter-button"></button>
+                <button onClick={closeModal} className="filterBtn tag-filter-button"></button>
+                {modal && <Modal closeModal={closeModal} modalClass={modalClass}/>}
               </div>}
               <div className={isSearch ? "search-form focus" : "search-form"} >
                 <div className="input-wrapper" >
-                  <input onClick={onClick}className="search-bar" placeholder="Search my highlights" type="text"/>
+                  <input onClick={openSearchBar}className="search-bar" placeholder="Search my highlights" type="text"/>
                   {isSearch ? <button onClick={onClick}className="cancel-search-button"></button>
                   : <span id="my-highlight-search" className="search-button circular-button" ></span>}
             
@@ -1017,7 +1042,7 @@ function MyHighlights() {
         {isSearch && <span className="search-message">Search results from my highlights</span>}
         <PageList>
 				{pages.map((page,index)=> (
-					<PageArticle key = {index} page={page} onToggle={onToggle}/>
+					<PageArticle closeModal={closeModal}key = {index} page={page} onToggle={onToggle}/>
 				))}
 			  </PageList>
       </StyledHighlight>

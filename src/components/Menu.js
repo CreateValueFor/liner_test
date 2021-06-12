@@ -8,11 +8,6 @@ const LinerHeader = styled.div`
   background-color: #fff;
   position: fixed;
   top: 0;
-  /* //가운데 배치
-  left: 0;
-  right: 0;
-  margin: 0 auto; */
-
   display: flex;
   align-items: center;
   justify-content: center;

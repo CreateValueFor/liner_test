@@ -84,3 +84,4 @@ react-router-dom, styled-component 설치
 5. My Highlights 탭
     For you 에서 구현한 pages, PageArticle함수를 이용하여 구현
     filter함수를 이용하여 선택됬ㅇ르 경우 UI가 변경되도록 설정하였습니다. 
+    이미지 클릭 시 hover안되면 안보이는 거 수정 필요

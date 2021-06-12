@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Detail(props) {
-	console.log(props.location)
+	console.log(props)
 	return (
 		<div>
 			
