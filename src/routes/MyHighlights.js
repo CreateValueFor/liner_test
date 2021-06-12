@@ -565,7 +565,7 @@ const PageList = styled.div`
           line-height: 1.5;
         }
 			}
-			.page-button-container{
+			/* .page-button-container{
 				position:relative;
 				display: inline-flex;
 				.tags-dropdown-container{
@@ -679,7 +679,7 @@ const PageList = styled.div`
 						background-image: url('https://getliner.com/src/images/delete-tooltip.svg');
 					}
 				}
-			}
+			} */
 		}
 		.page-list-separator{
 			height: 8px;
@@ -688,19 +688,175 @@ const PageList = styled.div`
 	}
 `;
 
-function PageArticle({page,onToggle,closeModal}) {
-	const [moreModal, setmoreModal] = useState(false)
-	const [isShare, setIsShare] = useState(false)
-	const [modal, setModal] = useState(false)
-  const [isShown, setIsShown] = useState(false);
+export const HighlightPageButtonContainer = styled.div`
+.page-button-container{
+				position:relative;
+				display: inline-flex;
+				.tags-dropdown-container{
+					margin-top: 4px;
+    			margin-right: 4px;
+					display: inline;
+    			position: relative;
+					.tags{
+						font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    				font-weight: 500;
+    				font-stretch: normal;
+    				font-style: normal;
+    				line-height: 1.5;
+    				font-size: 12px;
+    				letter-spacing: -.3px;
+    				color: #b0b4bd;
+    				height: 24px;
+						width:74px;
+    				border-radius: 4px;
+    				padding: 0 6px;
+    				margin: 3px 4px 3px 0;
+    				text-align: right;
+						display: inline-flex;
+    				align-items: center;
+					}
+				}
+				button{
+					width: 32px;
+    			height: 32px;
+    			background-size: 24px;
+    			background-repeat: no-repeat;
+    			background-position: 50%;
+    			border-radius: 50%;
+					&:hover{
+						background-color: #f6f8fa;
+					}
+				}
+				.save{
+					position:relative;
+					background-image: url('https://getliner.com/src/images/share-header.svg')
+				}
+				.saved{
+					position:relative;
+					background-image: url('https://getliner.com/src/images/share-header.svg')
+				}
+				.dropdown-container{
+					display:inline;
+					position:relative;
+					height:32px;
+				}
+				.export{
+					background-image: url('https://getliner.com/src/images/export-header.svg')
+				}
+				.more{
+					background-image: url('https://getliner.com/src/images/more-light.svg')
+				}
+				ul.dropdown{
+					position: absolute;
+    			top: 34px;
+    			min-width: 224px;
+    			width: max-content;
+    			white-space: nowrap;
+    			z-index: 2;
+    			border-radius: 8px;
+    			box-shadow: 0 10px 20px 0 rgb(39 43 49 / 10%);
+    			border: 1px solid #eef1f4;
+    			background-color: #fff;
+    			padding: 8px 0;
+    			margin: 0;
+					li{
+						list-style-type: none;
+    				height: 40px;
+    				background-color: #fff;
+    				font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    				font-size: 14px;
+    				font-weight: 400;
+    				font-stretch: normal;
+    				font-style: normal;
+    				line-height: normal;
+    				letter-spacing: -.35px;
+    				color: #52565d;
+    				padding: 8px 15px;
+    				display: flex;
+    				align-items: center;
+    				cursor: pointer;
+						&:hover{
+							background-color: #f6f8fa;
+						}
+						.dropdown-icon{
+							background-repeat: no-repeat;
+    					background-size: 24px 24px;
+    					width: 24px;
+    					height: 24px;
+    					margin-right: 8px;
+						}
+					}
+					li:first-child .dropdown-icon.share-icon{
+						background-image: url('https://getliner.com/src/images/summary-dropdown.svg');
+					}
+				
+					li:last-child .dropdown-icon.share-icon{
+						background-image: url('https://getliner.com/src/images/fulltext-dropdown.svg');
+					}
+          li:first-child .dropdown-icon.more-icon{
+						background-image: url('https://getliner.com/src/images/edit-header.svg');
+					}
+          li:nth-child(2) .dropdown-icon.more-icon{
+            background-image: url('https://getliner.com/src/images/original-dropdown.svg');
+          }
+					li:last-child .dropdown-icon.more-icon{
+						background-image: url('https://getliner.com/src/images/delete-tooltip.svg');
+					}
+				}
+			}`;
 
-	const onClick = () => {
-		setmoreModal(prev => !prev)
-	}
-	//onClick이랑 합치면 좋을 듯
-	const sharePage = () => {
+export function MyPageButtonContainer({closeModal}){
+  const [modal, setModal] = useState(false)
+  const [isShare, setIsShare] = useState(false)
+  const [moreModal, setmoreModal] = useState(false)
+  const sharePage = () => {
 		setIsShare(prev => !prev);
 	}
+  const onClick = () => {
+		setmoreModal(prev => !prev)
+	}
+  return(
+    <HighlightPageButtonContainer>
+      <div className="page-button-container">
+                <button 
+                  onClick={sharePage}
+                  className="circular-button saved"
+                />
+            {isShare && <ul className="dropdown">
+              <li>
+                <span className="dropdown-icon share-icon"></span>
+                Full text with highlights
+              </li>
+              <li>
+                <span className="dropdown-icon share-icon"></span>
+                Highlight summary
+              </li>
+            </ul>}
+                <div className="dropdown-container">
+                  <button onClick={closeModal} className="export circular-button"></button>
+              {modal && <Modal closeModal={closeModal} class/>}
+                </div>
+                <div className="dropdown-container">
+                  <button onClick= {onClick}className="circular-button more"></button>
+                  {moreModal && <ul className="dropdown">
+                    <li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
+                      Edit a title
+                    </li>
+                    <li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
+                      View Original
+                    </li>
+                    <li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
+                      Move to trash
+                    </li>
+                  </ul>}
+                </div>
+              </div>
+    </HighlightPageButtonContainer>
+  )
+}
+
+function PageArticle({page,onToggle,closeModal}) {
+  const [isShown, setIsShown] = useState(false);
 
 
 	return(
@@ -713,7 +869,12 @@ function PageArticle({page,onToggle,closeModal}) {
 				<div className={page.src === ''? "page-contents no-img":"page-contents"}>
 					<div className="title-container">
 						<h2 className="title">
-							<Link to={page.id}>{page.title}</Link>
+              <Link 
+								to={{
+								pathname: `/myhighlights/pages/:${page.id}`,
+								state:{page}}}>
+									{page.title}
+							</Link>
 						</h2>
 					</div>
 					<div className="highlight">
@@ -745,40 +906,7 @@ function PageArticle({page,onToggle,closeModal}) {
           <div className="vertical-line"></div>
           <div className="date">Jun 11, 2021</div>
 				</div>
-				<div className="page-button-container">
-					<button 
-						onClick={sharePage}
-						className="circular-button saved"
-					/>
-          {isShare && <ul className="dropdown">
-            <li>
-              <span className="dropdown-icon share-icon"></span>
-              Full text with highlights
-            </li>
-            <li>
-              <span className="dropdown-icon share-icon"></span>
-              Highlight summary
-            </li>
-          </ul>}
-					<div className="dropdown-container">
-						<button onClick={closeModal} className="export circular-button"></button>
-            {modal && <Modal closeModal={closeModal} class/>}
-					</div>
-					<div className="dropdown-container">
-						<button onClick= {onClick}className="circular-button more"></button>
-						{moreModal && <ul className="dropdown">
-							<li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
-								Edit a title
-							</li>
-							<li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
-								View Original
-							</li>
-							<li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
-								Move to trash
-							</li>
-						</ul>}
-					</div>
-				</div>
+        <MyPageButtonContainer closeModal={closeModal}/>
 			</div>
 			<div className="page-list-separator"></div>
 			{/* {modal && <Modal closeModal={closeModal}/>} */}

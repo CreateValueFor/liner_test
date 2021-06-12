@@ -257,7 +257,7 @@ const lottieSetting = {
 	}
 };
 
-const PageList = styled.div`
+export const PageList = styled.div`
 	.page-container{
 		padding: 24px 16px 0;
     width: 712px;
@@ -368,7 +368,124 @@ const PageList = styled.div`
 					}
 				}
 			}
-			.page-button-container{
+			/* .page-button-container{
+				position:relative;
+				display: inline-flex;
+				.tags-dropdown-container{
+					margin-top: 4px;
+    			margin-right: 4px;
+					display: inline;
+    			position: relative;
+					.tags{
+						font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    				font-weight: 500;
+    				font-stretch: normal;
+    				font-style: normal;
+    				line-height: 1.5;
+    				font-size: 12px;
+    				letter-spacing: -.3px;
+    				color: #b0b4bd;
+    				height: 24px;
+						width:74px;
+    				border-radius: 4px;
+    				padding: 0 6px;
+    				margin: 3px 4px 3px 0;
+    				text-align: right;
+						display: inline-flex;
+    				align-items: center;
+					}
+				}
+				button{
+					width: 32px;
+    			height: 32px;
+    			background-size: 24px;
+    			background-repeat: no-repeat;
+    			background-position: 50%;
+    			border-radius: 50%;
+					&:hover{
+						background-color: #f6f8fa;
+					}
+				}
+				.save{
+					position:relative;
+					background-image: url('https://getliner.com/src/images/save.svg')
+				}
+				.saved{
+					position:relative;
+					background-image: url('https://getliner.com/src/images/save-fill.svg')
+				}
+				.dropdown-container{
+					display:inline;
+					position:relative;
+					height:32px;
+				}
+				.share{
+					background-image: url('https://getliner.com/src/images/share-header.svg')
+				}
+				.more{
+					background-image: url('https://getliner.com/src/images/more-light.svg')
+				}
+				ul.dropdown{
+					position: absolute;
+    			top: 34px;
+    			min-width: 224px;
+    			width: max-content;
+    			white-space: nowrap;
+    			z-index: 2;
+    			border-radius: 8px;
+    			box-shadow: 0 10px 20px 0 rgb(39 43 49 / 10%);
+    			border: 1px solid #eef1f4;
+    			background-color: #fff;
+    			padding: 8px 0;
+    			margin: 0;
+					li{
+						list-style-type: none;
+    				height: 40px;
+    				background-color: #fff;
+    				font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    				font-size: 14px;
+    				font-weight: 400;
+    				font-stretch: normal;
+    				font-style: normal;
+    				line-height: normal;
+    				letter-spacing: -.35px;
+    				color: #52565d;
+    				padding: 8px 15px;
+    				display: flex;
+    				align-items: center;
+    				cursor: pointer;
+						&:hover{
+							background-color: #f6f8fa;
+						}
+						.dropdown-icon{
+							background-repeat: no-repeat;
+    					background-size: 24px 24px;
+    					width: 24px;
+    					height: 24px;
+    					margin-right: 8px;
+						}
+					}
+					li:first-child .dropdown-icon{
+						background-image: url('https://getliner.com/src/images/like-dropdown.svg');
+					}
+					li:nth-child(2) .dropdown-icon{
+						background-image: url('https://getliner.com/src/images/dislike-dropdown.svg');
+					}
+					li:last-child .dropdown-icon{
+						background-image: url('https://getliner.com/src/images/hide-dropdown.svg');
+					}
+				}
+			} */
+		}
+		.page-list-separator{
+			height: 8px;
+    	border-bottom: 1px solid #eef1f4;
+		}
+	}
+`;
+
+export const StyledPageButtonContainer = styled.div`
+	.page-button-container{
 				position:relative;
 				display: inline-flex;
 				.tags-dropdown-container{
@@ -476,15 +593,9 @@ const PageList = styled.div`
 					}
 				}
 			}
-		}
-		.page-list-separator{
-			height: 8px;
-    	border-bottom: 1px solid #eef1f4;
-		}
-	}
 `;
 
-const pages = [
+export const pages = [
 	{
 		id: 'detail1',
 		href: 'https://react.vlpt.us/basic/20-useReducer.html',
@@ -527,35 +638,86 @@ const pages = [
 	}
 ];
 
-function PageArticle({page}) {
+export function PageButtonContainer({closeModal}){
 	const [moreDropDownMenu, setmoreDropDownMenu] = useState(false)
 	const [isSave, setIsSave] = useState(false)
-	const [modal, setModal] = useState(false)
-	const [modalClass, setModalClass] = useState('original');
-
 	const onClick = () => {
 		setmoreDropDownMenu(prev => !prev)
 	}
-	//onClick이랑 합치면 좋을 듯
 	const savePage = () => {
 		setIsSave(prev => !prev);
 	}
+	return(
+		<StyledPageButtonContainer>
+			<div className="page-button-container">
+			{isSave && <div className="tags-dropdown-container add-tags-dropdown">
+				<button className="tags">+&nbsp;Add&nbsp;tags</button>
+			</div>}
+			<button
+				onClick={savePage}
+				className={isSave ? "circular-button saved" : "circular-button save"}
+				aria-label={isSave ? "Save" : "Saved"}
+			/>
+			<div className="dropdown-container">
+				<button onClick={closeModal} className="share circular-button"></button>
+			</div>
+			<div className="dropdown-container">
+				<button onClick= {onClick}className="circular-button more"></button>
+				{moreDropDownMenu && <ul className="dropdown">
+					<li onClick={closeModal}><span className="dropdown-icon"></span>
+						More pages like this
+					</li>
+					<li onClick={closeModal}><span className="dropdown-icon"></span>
+						Fewer pages like this
+					</li>
+					<li onClick={closeModal}><span className="dropdown-icon"></span>
+						Hide this page
+					</li>
+				</ul>}
+			</div>
+				</div>
+		</StyledPageButtonContainer>
+	)
+}
+
+
+export function PageArticle({page}) {
+	// const [moreDropDownMenu, setmoreDropDownMenu] = useState(false)
+	// const [isSave, setIsSave] = useState(false)
+	const [modal, setModal] = useState(false)
+	const [modalClass, setModalClass] = useState('original');
+	
+	
+	
+	
+
+
+	// const onClick = () => {
+	// 	setmoreDropDownMenu(prev => !prev)
+	// }
+	//onClick이랑 합치면 좋을 듯
+	// const savePage = () => {
+	// 	setIsSave(prev => !prev);
+	// }
 	const closeModal = (event) => {
 		setModal(prev => !prev);
 		
 		const {target:{classList}} = event;
 		setModalClass(classList[0])
 	}
-
+	
 	return(
 		<article className="page-container">
 			<div className="page-contents-container">
 				<div className={page.src === ''? "page-contents no-img":"page-contents"}>
 					<div className="title-container">
 						<h2 className="title">
-							<Link to={{
+							<Link 
+								to={{
 								pathname: `/home/pages/:${page.id}`,
-								state:{page}}}>{page.title}</Link>
+								state:{page}}}>
+									{page.title}
+							</Link>
 						</h2>
 					</div>
 					<div className="highlight">
@@ -574,10 +736,11 @@ function PageArticle({page}) {
 				<div className="page-source-container">
 					<img src={page.favicon} alt="favicon" className="favicon"/>
 					<div className="source">
-						<a href={page.href} target="_blank" className="source-link">{page.href}</a>
+						<a href={page.href} target="_blank" className="source-link">{page.href.split('/')[2]}</a>
 					</div>
 				</div>
-				<div className="page-button-container">
+				<PageButtonContainer closeModal={closeModal} />
+				{/* <div className="page-button-container">
 					{isSave && <div className="tags-dropdown-container add-tags-dropdown">
 						<button className="tags">+&nbsp;Add&nbsp;tags</button>
 					</div>}
@@ -603,7 +766,7 @@ function PageArticle({page}) {
 							</li>
 						</ul>}
 					</div>
-				</div>
+				</div> */}
 			</div>
 			<div className="page-list-separator"></div>
 			{modal && <Modal closeModal={closeModal} modalClass={modalClass} page={page}/>}
