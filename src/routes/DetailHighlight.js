@@ -278,6 +278,7 @@ const RelevantPages = styled.div`
 `;
 
 function DetailHighlight({history}) {
+	
 	const [modal, setModal] = useState(false)
 	const [modalClass, setModalClass] = useState('original');
 	console.log(history)

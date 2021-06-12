@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Lottie from 'react-lottie';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import animationData from '../lotties/myhighlights.json'
 
-
+// lottie 동작을 위한 세팅입니다.
 const lottieSetting = {
 	loop: true,
 	autoplay: true,
@@ -18,7 +18,7 @@ const lottieSetting = {
 const StyledHighlight = styled.div`
   position: relative;
   margin-top: 40px;
-  z-index: 1;
+  
   .my-highlights{
     .my-highlights-info{
     }
@@ -146,12 +146,12 @@ const PageHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px 0 0;
-  z-index: 1;
+  z-index: 11;
   margin-top: 40px;
   width: 712px;
   height: 40px;
   background-color: #fff;
-  z-index: 6;
+  
   .left-container{
     display: flex;
     align-items: center;
@@ -805,21 +805,25 @@ export const HighlightPageButtonContainer = styled.div`
 				}
 			}`;
 
+//Detail페이지에서 재사용 할 수 있도록 article의 share, export, more 버튼을 담은 컨포넌트를 export 합니다.
 export function MyPageButtonContainer({closeModal}){
+  
   const [modal, setModal] = useState(false)
   const [isShare, setIsShare] = useState(false)
-  const [moreModal, setmoreModal] = useState(false)
-  const sharePage = () => {
-		setIsShare(prev => !prev);
+  const [moreDropDown, setmoreDropDown] = useState(false)
+
+  //share과 more버튼 드롭다운 동작 버튼입니다.
+  const onClick = (event) => {
+    const {target:{classList}} = event;
+    if (classList[1]==="saved") setIsShare(prev => !prev);
+    else if(classList[1] ==='more') setmoreDropDown(prev => !prev)
 	}
-  const onClick = () => {
-		setmoreModal(prev => !prev)
-	}
+
   return(
     <HighlightPageButtonContainer>
       <div className="page-button-container">
                 <button 
-                  onClick={sharePage}
+                  onClick={onClick}
                   className="circular-button saved"
                 />
             {isShare && <ul className="dropdown">
@@ -838,7 +842,7 @@ export function MyPageButtonContainer({closeModal}){
                 </div>
                 <div className="dropdown-container">
                   <button onClick= {onClick}className="circular-button more"></button>
-                  {moreModal && <ul className="dropdown">
+                  {moreDropDown && <ul  className="dropdown">
                     <li onClick={closeModal}><span className="dropdown-icon more-icon"></span>
                       Edit a title
                     </li>
@@ -857,8 +861,6 @@ export function MyPageButtonContainer({closeModal}){
 
 function PageArticle({page,onToggle,closeModal}) {
   const [isShown, setIsShown] = useState(false);
-
-
 	return(
 		<article 
       className="page-container"
@@ -884,12 +886,10 @@ function PageArticle({page,onToggle,closeModal}) {
 						</mark>
 					</div>
 				</div>
-				{page.src !== '' && (
-          <div className ="image-link">
-					  <img alt="document" src={page.src}/>
-            {isShown && <div onClick={onToggle} id={page.id} className={page.done ? "page-select-img selected": "page-select-img select"}></div>}
-				  </div>
-          )}
+        <div className ="image-link">
+          {page.src !== '' && <img alt="document" src={page.src}/>}
+          {(isShown|| page.done)  && <div onClick={onToggle} id={page.id} className={page.done ? "page-select-img selected": "page-select-img select"}></div>}
+        </div>
 			</div>
 			<div class="page-tags" >
         <div class="tag-icon" ></div>
@@ -901,7 +901,7 @@ function PageArticle({page,onToggle,closeModal}) {
 				<div className="page-source-container">
 					<img src={page.favicon} alt="favicon" className="favicon"/>
 					<div className="source">
-						<a href={page.href} target="_blank" className="source-link">{page.href}</a>
+						<a href={page.href} target="_blank" rel="noreferrer"className="source-link">{page.href}</a>
 					</div>
           <div className="vertical-line"></div>
           <div className="date">Jun 11, 2021</div>
@@ -1048,16 +1048,20 @@ function MyHighlights() {
     }
   ])
   const [modal, setModal] = useState(false);
-  const [filterModal, setFilterModal] = useState(false);
   const [modalClass, setModalClass] = useState('original');
   const selectedPages = pages.filter(page=> page.done);
-
+  //모달을 여닫는 함수입니다. 이벤트 타겟의 클래스에 따라 다른 정보가 호출되도록 하였습니다.
   const closeModal = (event) => {
 		setModal(prev => !prev);
 		
 		const {target:{classList}} = event;
 		setModalClass(classList[0])
 	}
+  //onClear과 onToggle함수를 이용하여 page클릭 시 UI변화를 구현하였습니다. 
+  const onClear = () =>{
+    setPages(pages.map(page=>({...page, done: false}
+    )))
+  }
 
   const onToggle = (event) => {
     const {target:{id}} = event;
@@ -1126,7 +1130,7 @@ function MyHighlights() {
         <PageHeader>
           {selectedPages.length > 0 ? <>
             <div className="left-container">
-              <button className="close-button"></button>
+              <button onClick = {onClear}className="close-button"></button>
               {selectedPages.length} page selected
             </div>
             <div className="right-container">

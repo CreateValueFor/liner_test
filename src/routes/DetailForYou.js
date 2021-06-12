@@ -71,6 +71,7 @@ const DetailContainer = styled.div`
     		align-items: center;
     		position: relative;
     		cursor: default;
+			margin-bottom:16px;
 				.favicon{
 					background-repeat: no-repeat;
     			background-size: 20px 20px;
@@ -85,7 +86,7 @@ const DetailContainer = styled.div`
     			text-decoration: underline;
 					font-family: "Roboto","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
     			color: #777;
-    			font-size: 11px;
+    			font-size: 12px;
     			line-height: 1.5;
 					.source-link{
 						color: #777;
@@ -219,7 +220,7 @@ const RelevantPages = styled.div`
 function Detail({history}) {
 	const [modal, setModal] = useState(false)
 	const [modalClass, setModalClass] = useState('original');
-	console.log(history)
+	console.log(history.location.pathname)
 	useEffect(()=>{
 		console.log(history)
 		if(history === undefined){

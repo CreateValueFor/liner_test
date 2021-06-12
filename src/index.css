@@ -20,3 +20,12 @@ input {
     background-color: transparent;
     outline:none;
 }
+input::placeholder{
+    opacity: .4;
+}
+input::-webkit-input-placeholder {
+    opacity: .4;
+}
+input:-ms-input-placeholder {
+    opacity: .4;
+}

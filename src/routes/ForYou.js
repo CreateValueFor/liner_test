@@ -637,16 +637,19 @@ export const pages = [
 		hightlight : '버튼 클릭으로 숫자가 증가하는 Counter 예제를 보겠습니다'
 	}
 ];
-
+//For you의 article에 있는 save, share, more 버튼을 담고 있는 컨테이너 입니다. 
 export function PageButtonContainer({closeModal}){
 	const [moreDropDownMenu, setmoreDropDownMenu] = useState(false)
 	const [isSave, setIsSave] = useState(false)
+	//more 버튼을 열고 닫기 위한 함수입니다.
 	const onClick = () => {
 		setmoreDropDownMenu(prev => !prev)
 	}
+	//save 버튼 UI 변화를 위한 함수입니다.
 	const savePage = () => {
 		setIsSave(prev => !prev);
 	}
+
 	return(
 		<StyledPageButtonContainer>
 			<div className="page-button-container">
@@ -680,25 +683,11 @@ export function PageButtonContainer({closeModal}){
 	)
 }
 
-
 export function PageArticle({page}) {
-	// const [moreDropDownMenu, setmoreDropDownMenu] = useState(false)
-	// const [isSave, setIsSave] = useState(false)
+	//모달을 열고 닫는 함수입니다. 클래스리스트의 값에 따라 다른 모달이 호출될 수 있도록 모달의 클래스도 같이 상태관리하여 보내줍니다.
 	const [modal, setModal] = useState(false)
 	const [modalClass, setModalClass] = useState('original');
 	
-	
-	
-	
-
-
-	// const onClick = () => {
-	// 	setmoreDropDownMenu(prev => !prev)
-	// }
-	//onClick이랑 합치면 좋을 듯
-	// const savePage = () => {
-	// 	setIsSave(prev => !prev);
-	// }
 	const closeModal = (event) => {
 		setModal(prev => !prev);
 		
@@ -736,37 +725,10 @@ export function PageArticle({page}) {
 				<div className="page-source-container">
 					<img src={page.favicon} alt="favicon" className="favicon"/>
 					<div className="source">
-						<a href={page.href} target="_blank" className="source-link">{page.href.split('/')[2]}</a>
+						<a href={page.href} target="_blank" rel="noreferrer"className="source-link">{page.href.split('/')[2]}</a>
 					</div>
 				</div>
 				<PageButtonContainer closeModal={closeModal} />
-				{/* <div className="page-button-container">
-					{isSave && <div className="tags-dropdown-container add-tags-dropdown">
-						<button className="tags">+&nbsp;Add&nbsp;tags</button>
-					</div>}
-					<button 
-						onClick={savePage}
-						className={isSave ? "circular-button saved" : "circular-button save"}
-						aria-label={isSave ? "Save" : "Saved"}
-					/>
-					<div className="dropdown-container">
-						<button onClick={closeModal} className="share circular-button"></button>
-					</div>
-					<div className="dropdown-container">
-						<button onClick= {onClick}className="circular-button more"></button>
-						{moreDropDownMenu && <ul className="dropdown">
-							<li onClick={closeModal}><span className="dropdown-icon"></span>
-								More pages like this
-							</li>
-							<li onClick={closeModal}><span className="dropdown-icon"></span>
-								Fewer pages like this
-							</li>
-							<li onClick={closeModal}><span className="dropdown-icon"></span>
-								Hide this page
-							</li>
-						</ul>}
-					</div>
-				</div> */}
 			</div>
 			<div className="page-list-separator"></div>
 			{modal && <Modal closeModal={closeModal} modalClass={modalClass} page={page}/>}
@@ -774,12 +736,11 @@ export function PageArticle({page}) {
 	);
 }
 
+function ForYou({history}) {
 
-
-function ForYou() {
 	const [lottie, setLottie] = useState(false);
 	const [pause, setPause] = useState(false);
-	const [languageModal, setlanguageModal] = useState(false);
+	const [languageDropDown, setlanguageDropDown] = useState(false);
 	const [languages, setLanguages] = useState([
 		{
 			lang: 'English',
@@ -812,37 +773,29 @@ function ForYou() {
 			done: false
 		},
 	])
-	const modalLG = useRef()
-
-	//모달 분리할 것 => useEffect를 더 효율적으로 사용하기 위해서 
-
+	//처음 url클릭 시 랜딩 path를 home으로 설정하기 위해 useEffect를 이용하였습니다.
+	useEffect(()=>{
+		if (history && history.location.pathname === '/') history.push('/home')
+	},[])
+	//lottie 실행 함수들
 	const onClick = () => {
 		setLottie(prev=> !prev)
 	}
 	const onPause = () =>{
 		setPause(prev => !prev)
 	}
+	//language드롭다운 클릭 시 색이 변하도록 map함수를 이용하여 접근한 객체가 클릭된 타겟과 아이디가 같다면 객체를 수정하였습니다.
 	const onToggle = (event) => {
 		const {target:{id}} = event;
 		setLanguages(languages.map(lang => 
 				lang.id === parseInt(id) ? {...lang, done : !lang.done} : lang
 		))
-		console.log(languages)
+	}
+	//language 드롭다운 open 함수
+	const openDropDown = () => {
+		setlanguageDropDown(prev => !prev)
 	}
 
-	const openModal = () => {
-		setlanguageModal(prev => !prev)
-	}
-
-	const closeModal = ({target}) => {
-		if (languageModal && !modalLG.current.contains(target)) setlanguageModal(false);
-	};
-	useEffect(()=> {
-		window.addEventListener("click", closeModal);
-		return () => {
-			window.removeEventListener("click", closeModal);
-		};
-	},[]);
 
 	return (
 		<ForyouContainer>
@@ -876,11 +829,11 @@ function ForYou() {
 						)}
 					</div>
 					<div className="language false dropdwon-container">
-						<button className="language-btn false" onClick = {openModal}>
+						<button className="language-btn false" onClick = {openDropDown}>
 							Languages
-							<div className={languageModal ? 'collapse': 'expand'}></div>
+							<div className={languageDropDown ? 'collapse': 'expand'}></div>
 						</button>
-						{languageModal && <div ref={modalLG}>
+						{languageDropDown && <div>
 							<div className="language-dropdown">
 								<ul className="dropdown">
 									<div className="dropdown-header">Select for feed</div>

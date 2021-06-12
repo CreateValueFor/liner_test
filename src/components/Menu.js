@@ -91,7 +91,7 @@ const RightButtonContainer = styled.div`
     box-sizing: border-box;
   }
   button:first-child{
-    height: 32;
+    height: 32px;
     margin: 4px 24px 4px 212px;
     padding: 7px 20px;
     border-radius: 8px;
@@ -121,6 +121,7 @@ const RightButtonContainer = styled.div`
 `;
 
 function Menu() {
+  
   const onSubmit = (event) =>{
     event.preventDefault();
   }

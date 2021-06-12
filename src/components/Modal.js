@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const StyledModal = styled.div`
@@ -248,12 +248,11 @@ const StyledShareModalDetail = styled.div`
 `;
 
 
-
 function ShareModal({page}){
 	const [copy, setCopy] = useState(false)
 	const onClick = () => {
 		setCopy(true)
-		setTimeout(1000)
+		setTimeout(1000,setCopy(false));
 	}
 
 	return[
@@ -909,9 +908,24 @@ function Modal(props){
 	const {closeModal, modalClass} = props
 	console.log(modalClass);
 	const currentModal = switchModal(modalClass)
-	
+
+	const output= (e) => {
+		try{if(e.target.classList.length===3){
+			closeModal();
+		};}catch(error){
+			console.log(error);
+		}
+		
+	}
+
+	useEffect(()=>{
+		window.addEventListener("click",output);
+		return () => {
+			window.removeEventListener("click",output);
+		}
+	},[]);
 	return(
-		<StyledModal>
+		<StyledModal className="modal">
 			<div className={"modal-content "+ modalClass}>
 				<div className={'modal-header ' + modalClass}>
 					{currentModal(props)[0]}

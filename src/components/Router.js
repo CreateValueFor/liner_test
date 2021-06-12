@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HashRouter as Router, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
 import Detail from '../routes/DetailForYou';
@@ -37,7 +37,11 @@ const MainContainer = styled.div`
 
 
 function AppRouter() {
-  
+  const [isForYouDetail, setIsForYouDetail] = useState(false);
+  const routeRelevant = () => {
+    setIsForYouDetail(prev => !prev);
+  };
+
   return (
     <Router>
       <DesktopContainer>
@@ -47,6 +51,7 @@ function AppRouter() {
       <StyledMain>
         <MainContainer>
           <Switch>
+            <Route exact path="/" component={ForYou} />
             <Route exact path="/home">
               <ForYou/>
             </Route>
@@ -60,13 +65,13 @@ function AppRouter() {
             <Route path="/myhighlights/pages/:id" component={DetailHighlight}/>
           </Switch>
         </MainContainer>
-
-
-          <Route path="/home/pages" component={Relevant}/>
-          {/* <Route path='/' component={Recommendation}/> */}
           
-
-
+          <Switch>
+            <Route path="/home/pages" component={Relevant}/>
+            <Route path='/home' component={Recommendation}/>
+            <Route path='/myhighlights/' component={Recommendation}/>
+            <Route path='/more' component={Recommendation}/>
+          </Switch>
 
       </StyledMain>
 

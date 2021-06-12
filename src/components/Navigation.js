@@ -43,8 +43,8 @@ const MenuContainer = styled.div`
 
 
 
-function Navigation() {
-
+function Navigation({history}) {
+	
 	const links = [
 		{
 			id: 1,
@@ -62,15 +62,13 @@ function Navigation() {
 			to : "/more"
 		}
 	]
-
 	const [activeId, setActiveId] = useState(null);
 
 	const onClick = (event) => {
 		const {target:{id}} = event;
 		setActiveId(id);
 	}
-// history props받고 이탈이되면 해제하는 식으로 수정
-// 같이 검사
+	
   return (
     <MenuContainer>
 			{links.map(link => (
