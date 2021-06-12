@@ -158,6 +158,28 @@ const PagesContainer = styled.div`
 			margin: 0;
 		}
 	}
+	.show-more{
+		font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: -.3px;
+    color: #00bdb8;
+    text-align: left;
+    padding: 12px 20px;
+    background-color: #f6f8fa;
+    cursor: pointer;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+		&:hover{
+			background-color: #eef1f4;
+		}
+	}
 `;
 
 const recommendPages = [
@@ -193,23 +215,68 @@ const recommendPages = [
 		id: "recommend-page-4",
 		to : "",
 		tag : ['personality','mbti'],
-		text : 'Song Maker - Chrome Music Lab',
+		text : 'Free Personality test | 16Personlaities',
 		source: 'www.16personalities.com'
 	}
 ]
 
 const StyledPage = styled(Link)`
 	width: 320px;
+	box-sizing:border-box;
 	padding: 8px 20px;
 	display: block;
 	text-decoration: none;
 	cursor: pointer;
+	&:hover{
+		background-color: #eef1f4;
+	}
 	.tag-list{
 		margin-bottom: 4px;
 		display:flex;
 		flex-wrap:wrap;
 		height: 15px;
 		overflow-y: hidden;
+		span{
+			font-family: "Montserrat","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    	font-size: 12px;
+    	font-weight: 500;
+    	font-stretch: normal;
+    	font-style: normal;
+    	line-height: 1.2;
+    	height: 18px;
+    	letter-spacing: -.3px;
+    	color: #777;
+    	margin-right: 6px;
+		}
+	}
+	.title-trending{
+			font-family: "Roboto","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    	font-size: 16px;
+   		font-weight: 700;
+    	font-stretch: normal;
+    	font-style: normal;
+    	line-height: 1.25;
+    	letter-spacing: normal;
+    	color: #333;
+    	display: -webkit-box;
+    	-webkit-line-clamp: 2;
+    	-webkit-box-orient: vertical;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+			width: 280px;
+		}
+	.recommendation-page-source-container{
+		display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+		.source{font-family: "Roboto","Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #999;}
 	}
 `;
 
@@ -222,7 +289,7 @@ function PageLink(page){
 					<span key={index}>#{t}</span>
 				))}
 			</div>
-			<div className="title">{page.text}</div>
+			<div className="title-trending">{page.text}</div>
 			<div className="recommendation-page-source-container">
 				<div className="source">{page.source}</div>
 			</div>
@@ -254,14 +321,15 @@ function Recommendation() {
 					<div className="border"></div>
 					<ul className="contents">
 						{recommendPages.map((page,index) => (
-							
 							<PageLink page= {page} key = {index}/>
 						))}
 					</ul>
 				</div>
 				<div className="show-more">
-
+					Show More
+					<img alt = "more" src="https://getliner.com/src/images/expand.svg"/>
 				</div>
+				
 			</PagesContainer>
     </RecommendationContainer>
   );

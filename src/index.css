@@ -1,0 +1,22 @@
+*, :after, :before{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-stretch: normal;
+}
+button{
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+input {
+    border: none;
+    background-color: transparent;
+    outline:none;
+}

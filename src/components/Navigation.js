@@ -69,7 +69,8 @@ function Navigation() {
 		const {target:{id}} = event;
 		setActiveId(id);
 	}
-
+// history props받고 이탈이되면 해제하는 식으로 수정
+// 같이 검사
   return (
     <MenuContainer>
 			{links.map(link => (
@@ -77,7 +78,7 @@ function Navigation() {
 					onClick = {onClick}
 					key= {link.id}
 					id = {link.id}
-					className={activeId == link.id ? 'active' : 'inactive'}
+					className={ parseInt(activeId) === link.id ? 'active' : 'inactive'}
 					to = {link.to}
 				>{link.text}</Link>
 				))}

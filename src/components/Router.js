@@ -1,11 +1,14 @@
 import React from 'react';
 import { HashRouter as Router, Route, Switch} from 'react-router-dom';
 import styled from 'styled-components';
+import Detail from '../routes/Detail';
 import ForYou from '../routes/ForYou';
+import More from '../routes/More';
+import MyHighlights from '../routes/MyHighlights';
 import Menu from './Menu';
 import Navigation from './Navigation';
 import Recommendation from './Recommend';
-import TrendingPages from './TrendingPages';
+
 
 const DesktopContainer = styled.div`
   width:1280px;
@@ -41,8 +44,17 @@ function AppRouter() {
       <StyledMain>
         <MainContainer>
           <Switch>
-            <Route path="/">
+            <Route exact path="/home">
               <ForYou/>
+            </Route>
+            <Route path="/myhighlights/highlights">
+              <MyHighlights/>
+            </Route>
+            <Route path="/more">
+              <More/>
+            </Route>
+            <Route path="/home/pages/:id">
+              <Detail />
             </Route>
           </Switch>
         </MainContainer>
